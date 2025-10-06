@@ -3,9 +3,9 @@ package dev.rnandor.paisho;
 import java.util.Optional;
 
 public class Table {
-    private static int TEMPLE = 1 << 0;
-    private static int RED_GARDEN = 1 << 1;
-    private static int WHITE_GARDEN = 1 << 2;
+    private static final int TEMPLE = 1 << 0;
+    private static final int RED_GARDEN = 1 << 1;
+    private static final int WHITE_GARDEN = 1 << 2;
 
 
     private Tile[][] tiles = new Tile[17][17];
