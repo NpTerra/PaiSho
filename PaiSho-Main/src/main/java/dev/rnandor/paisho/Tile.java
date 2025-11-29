@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public abstract class Tile {
 
@@ -18,4 +20,6 @@ public abstract class Tile {
     public boolean isGuest() {
         return !host;
     }
+
+    public abstract List<Position> getTiles(Table table);
 }

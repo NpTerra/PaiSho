@@ -6,17 +6,17 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Optional;
 
-public final class TileRegistry {
+public final class TileRegistry<T extends Tile> {
 
-    private HashMap<String, Class<? extends Tile>> tiles = new HashMap<>();
+    private HashMap<String, Class<? extends T>> tiles = new HashMap<>();
 
-    public TileRegistry() throws EntryClashException {
-        this("dev.rnandor.paisho");
+    public TileRegistry(Class<T> tClass) throws EntryClashException {
+        this("dev.rnandor.paisho", tClass);
     }
 
-    public TileRegistry(String packageName) throws EntryClashException {
+    public TileRegistry(String packageName, Class<T> tClass) throws EntryClashException {
         var ref = new Reflections(packageName);
-        for(var clazz : ref.getSubTypesOf(Tile.class)) {
+        for(var clazz : ref.getSubTypesOf(tClass)) {
             if(clazz.isAnonymousClass() || clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers()))
                 continue;
 
@@ -36,7 +36,7 @@ public final class TileRegistry {
         }
     }
 
-    public Optional<Class<? extends Tile>> getTile(String name) {
+    public Optional<Class<? extends T>> getTile(String name) {
         return Optional.ofNullable(tiles.get(name));
     }
 
