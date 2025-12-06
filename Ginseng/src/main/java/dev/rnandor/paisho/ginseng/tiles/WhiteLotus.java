@@ -8,13 +8,13 @@ import dev.rnandor.paisho.TileEntry;
 import java.util.List;
 
 @TileEntry("wl")
-public class WhiteLotus extends Tile {
+public class WhiteLotus extends GinsengTile {
     public WhiteLotus(boolean host) {
         super("White Lotus", host);
     }
 
     @Override
-    public List<Position> getTiles(Table table) {
+    public List<Position> getValidMoves(Table table) {
         return List.of();
     }
 }

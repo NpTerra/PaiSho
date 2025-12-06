@@ -1,6 +1,5 @@
 package dev.rnandor.paisho;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,5 +20,5 @@ public abstract class Tile {
         return !host;
     }
 
-    public abstract List<Position> getTiles(Table table);
+    public abstract List<Position> getValidMoves(Table table);
 }

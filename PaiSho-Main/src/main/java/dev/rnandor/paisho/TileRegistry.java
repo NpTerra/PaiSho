@@ -3,7 +3,9 @@ package dev.rnandor.paisho;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public final class TileRegistry<T extends Tile> {
@@ -11,7 +13,7 @@ public final class TileRegistry<T extends Tile> {
     private HashMap<String, Class<? extends T>> tiles = new HashMap<>();
 
     public TileRegistry(Class<T> tClass) throws EntryClashException {
-        this("dev.rnandor.paisho", tClass);
+        this(TileRegistry.class.getPackageName(), tClass);
     }
 
     public TileRegistry(String packageName, Class<T> tClass) throws EntryClashException {
@@ -38,6 +40,10 @@ public final class TileRegistry<T extends Tile> {
 
     public Optional<Class<? extends T>> getTile(String name) {
         return Optional.ofNullable(tiles.get(name));
+    }
+
+    public List<Class<? extends T>> getTiles() {
+        return new ArrayList<>(tiles.values());
     }
 
     public static class EntryClashException extends Exception {
