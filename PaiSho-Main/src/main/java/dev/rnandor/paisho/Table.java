@@ -98,7 +98,7 @@ public class Table {
     }
 
     private int[] fromGameCoords(int x, int y) {
-        return new int[] {y+8, x+8};
+        return new int[] {x+8, y+8};
     }
 
     public final Optional<Tile> getTile(int x, int y) {

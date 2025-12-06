@@ -10,21 +10,20 @@ import static dev.rnandor.paisho.Table.Locale.*;
 
 @Slf4j
 public class Main {
+
     public static void main(String[] args) throws InterruptedException {
         log.info("Starting Ginseng PaiSho UI...");
 
         Table t = new Table();
-        int x = 8, y = 0;
-        int mask = t.getType(x, y).get();
-        log.debug("Position: ("+x+", "+y+")");
-        log.debug("Red garden: "+Table.isRedGarden(mask));
-        log.debug("White garden: "+Table.isWhiteGarden(mask));
-        log.debug("Temple: "+Table.isTemple(mask));
-        log.debug("");
-        log.debug("North: "+Table.isFrom(mask, NORTHERN_TEMPLE));
-        log.debug("South: "+Table.isFrom(mask, SOUTHERN_TEMPLE));
-        log.debug("West: "+Table.isFrom(mask, WESTERN_TEMPLE));
-        log.debug("East: "+Table.isFrom(mask, EASTERN_TEMPLE));
+
+        printPos(0, 0, t);
+        printPos(8, 0, t);
+        printPos(-8, 0, t);
+        printPos(0, 8, t);
+        printPos(0, -8, t);
+
+        printPos(8, 8, t);
+
 
         var w = new GameWindow("hehe", 1000, 1000);
         w.add(new JPanel()  {
@@ -42,5 +41,19 @@ public class Main {
         w.setVisible(false);
         w.dispose();
         //w.repaint();
+    }
+
+    private static void printPos(int x, int y, Table t) {
+        int mask = t.getType(x, y).get();
+        log.debug("\n---- Position Debug ----");
+        log.debug("Position: ("+x+", "+y+")");
+        log.debug("Red garden: "+Table.isRedGarden(mask));
+        log.debug("White garden: "+Table.isWhiteGarden(mask));
+        log.debug("Temple: "+Table.isTemple(mask));
+        log.debug("");
+        log.debug("North: "+Table.isFrom(mask, NORTHERN_TEMPLE));
+        log.debug("South: "+Table.isFrom(mask, SOUTHERN_TEMPLE));
+        log.debug("West: "+Table.isFrom(mask, WESTERN_TEMPLE));
+        log.debug("East: "+Table.isFrom(mask, EASTERN_TEMPLE));
     }
 }
