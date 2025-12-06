@@ -2,23 +2,18 @@ package dev.rnandor.paisho.ginseng.tiles;
 
 import dev.rnandor.paisho.Position;
 import dev.rnandor.paisho.Table;
-import dev.rnandor.paisho.Tile;
 import dev.rnandor.paisho.TileEntry;
 
 import java.util.List;
 
 @TileEntry(value = "wl", priority = 1)
-public class WhiteLotus extends GinsengTile {
-    public WhiteLotus(boolean host, int priority, Table table) {
+public class Bison extends GinsengTile {
+    public Bison(boolean host, int priority, Table table) {
         super("White Lotus", host, priority, table);
     }
 
     @Override
     public List<Position> getValidMoves() {
-        var validSuper = super.getValidMoves();
-        if(validSuper != null)
-            return validSuper;
-
         return List.of();
     }
 

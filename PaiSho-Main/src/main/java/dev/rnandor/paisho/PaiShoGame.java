@@ -24,9 +24,10 @@ public abstract class PaiShoGame<T extends Tile> {
         this.registry = registry;
 
         for (Class<? extends T> tileClass : registry.getTiles()) {
-            Constructor<? extends T> construct = tileClass.getDeclaredConstructor(boolean.class);
-            tiles.add(construct.newInstance(true));
-            tiles.add(construct.newInstance(false));
+            Constructor<? extends T> construct = tileClass.getDeclaredConstructor(boolean.class, int.class, Table.class);
+            var ann = tileClass.getAnnotation(TileEntry.class);
+            tiles.add(construct.newInstance(true, ann.priority(), table));
+            tiles.add(construct.newInstance(false, ann.priority(), table));
         }
     }
 
