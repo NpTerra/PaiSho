@@ -37,6 +37,11 @@ public class GameBoardPanel extends ImagePanel {
     private static int[] capX = {8, 7, 6, 8, 7, 8};
     private static int[] capY = {8, 8, 8, 7, 7, 6};
 
+    /**
+     * Constructs a new GameBoardPanel with the specified background image.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     public GameBoardPanel() throws IOException {
         super(ResourceHelper.getResource("/tiles/board/classy.png"));
 
@@ -165,23 +170,17 @@ public class GameBoardPanel extends ImagePanel {
                     }
                 }
 
-                /*log.debug("Clicked: {}, {}", cx, cy);
-                log.debug("Clicked in game: {}, {}", tx, ty);
-
-                var tile = game.getTable().getTile(tx, ty);
-                if(tile.isPresent()) {
-                    var t = (GinsengTile) tile.get();
-                    log.debug("Tile: {}, {}, {}, {}", t.getName(), t.isHost() ? "host" : "guest", t.getPosition().getX(), t.getPosition().getY());
-                    log.debug("Bison boosted: {}", t.isBisonBoosted());
-                } else {
-                    log.debug("No tile here.");
-                }*/
-
                 repaint();
             }
         });
     }
 
+    /**
+     * Sets the current game and initializes the tile images.
+     *
+     * @param game the GinsengGame instance to display
+     * @throws IOException if an I/O error occurs
+     */
     public void setGame(GinsengGame game) throws IOException {
         this.game = game;
         this.selected = null;
@@ -209,11 +208,17 @@ public class GameBoardPanel extends ImagePanel {
         }
     }
 
+    /**
+     * Opens the tile replacement dialog, freezing the game state and preparing the captured tiles for selection.
+     */
     private void showTileReplacementDialog() {
         swapFreeze = true;
         swapTargets = selected.isHost() ? game.getHostCaptured() : game.getGuestCaptured();
     }
 
+    /**
+     * Closes the tile replacement dialog and resets the relevant state.
+     */
     public void closeTileReplacementDialog() {
         swapFreeze = false;
         selected = null;
@@ -223,6 +228,11 @@ public class GameBoardPanel extends ImagePanel {
         game.nextTurn();
     }
 
+    /**
+     * Draws the tile selection screen overlay when a tile is to be swapped with one from the captured ones.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawSelectionScreen(Graphics g) {
         if(!swapFreeze)
             return;
@@ -251,6 +261,13 @@ public class GameBoardPanel extends ImagePanel {
         g2.dispose();
     }
 
+    /**
+     * Gets the x-coordinate for a captured tile based on its index.
+     *
+     * @param tile The captured tile.
+     * @param i The index of the captured tile.
+     * @return The x-coordinate for the captured tile.
+     */
     private int getCapX(Tile tile, int i) {
         var x = capX[i%capX.length];
 
@@ -263,6 +280,13 @@ public class GameBoardPanel extends ImagePanel {
         return x;
     }
 
+    /**
+     * Gets the y-coordinate for a captured tile based on its index.
+     *
+     * @param tile The captured tile.
+     * @param i The index of the captured tile.
+     * @return The y-coordinate for the captured tile.
+     */
     private int getCapY(Tile tile, int i) {
         var y = capY[i%capY.length];
 
@@ -272,6 +296,11 @@ public class GameBoardPanel extends ImagePanel {
         return y;
     }
 
+    /**
+     * Draws the captured tiles for both players on the game board.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawCaptured(Graphics g) {
 
         var hc = game.getHostCaptured().toArray(new Tile[0]);
@@ -293,6 +322,15 @@ public class GameBoardPanel extends ImagePanel {
         }
     }
 
+    /**
+     * Draws an image at the specified game coordinates.
+     * These images are connected to Tiles, so the size and position correspond to tiles on the board.
+     *
+     * @param g The Graphics object to draw on.
+     * @param x The x-coordinate in game coordinates.
+     * @param y The y-coordinate in game coordinates.
+     * @param image The BufferedImage to draw.
+     */
     private void drawImageAtPosition(Graphics g, int x, int y, BufferedImage image) {
         var coords = game.getTable().fromGameCoords(x, y);
         coords[1] = 16-coords[1];
@@ -300,6 +338,16 @@ public class GameBoardPanel extends ImagePanel {
         g.drawImage(image, coords[0]*34 + 17, coords[1]*34 + 17, 34, 34, this);
     }
 
+    /**
+     * Draws a centered string on the Graphics2D object.
+     *
+     * @param g2 The Graphics2D object to draw on.
+     * @param color The color of the text.
+     * @param text The text to draw.
+     * @param font The font to use for the text.
+     * @param x The x-coordinate of the center position.
+     * @param y The y-coordinate of the center position.
+     */
     public void drawCenteredString(Graphics2D g2, Color color, String text, Font font, int x, int y) {
         var pf = g2.getFont();
         var pc = g2.getColor();
@@ -319,6 +367,12 @@ public class GameBoardPanel extends ImagePanel {
         g2.setColor(pc);
     }
 
+    /**
+     * Checks if the given tile is in danger of being captured.
+     *
+     * @param tile The GinsengTile to check.
+     * @return true if the tile is in danger, false otherwise.
+     */
     private boolean isInDanger(GinsengTile tile) {
         var pos = tile.getPosition();
         for(var move : moves) {
@@ -330,6 +384,12 @@ public class GameBoardPanel extends ImagePanel {
         return false;
     }
 
+    /**
+     * Checks if the given tile is a target for an ability.
+     *
+     * @param tile The GinsengTile to check.
+     * @return true if the tile is a target, false otherwise.
+     */
     private boolean isTarget(GinsengTile tile) {
         var pos = tile.getPosition();
         for(var target : targets) {
@@ -341,6 +401,14 @@ public class GameBoardPanel extends ImagePanel {
         return false;
     }
 
+    /**
+     * Draws a tile on the game board at the specified position.
+     *
+     * @param g The Graphics object to draw on.
+     * @param tile The GinsengTile to draw.
+     * @param x The x-coordinate in game coordinates.
+     * @param y The y-coordinate in game coordinates.
+     */
     private void drawTile(Graphics g, GinsengTile tile, int x, int y) {
         var code = game.getRegistry().getCode(tile.getClass()).orElse("idk");
         var img = tile.isHost() ? hostImages.get(code) : guestImages.get(code);
@@ -348,11 +416,22 @@ public class GameBoardPanel extends ImagePanel {
         drawImageAtPosition(g, x, y, img);
     }
 
+    /**
+     * Draws a tile on the game board at its current position.
+     *
+     * @param g The Graphics object to draw on.
+     * @param tile The GinsengTile to draw.
+     */
     private void drawTile(Graphics g, GinsengTile tile) {
         var pos = tile.getPosition();
         drawTile(g, tile, pos.getX(), pos.getY());
     }
 
+    /**
+     * Draws all tiles on the game board, highlighting those that are targets or in danger.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawTiles(Graphics g) {
         game.getTiles().forEach(tile -> {
             if(tile.isCaptured())
@@ -391,6 +470,11 @@ public class GameBoardPanel extends ImagePanel {
         });
     }
 
+    /**
+     * Draws selection accents on the game board for the selected tile, valid moves, and ability targets.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawSelectionAccents(Graphics g) {
         if(selected != null) {
             var pos = selected.getPosition();
@@ -408,6 +492,11 @@ public class GameBoardPanel extends ImagePanel {
         }
     }
 
+    /**
+     * Draws the end game screen overlay if the game is over.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawEndGameScreen(Graphics g) {
         if(game.isGameOver()) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -441,6 +530,11 @@ public class GameBoardPanel extends ImagePanel {
         }
     }
 
+    /**
+     * Draws debug lines on the game board for visual reference.
+     *
+     * @param g The Graphics object to draw on.
+     */
     private void drawDebugLines(Graphics g) {
         for(int i = 0; i <= 18; i++) {
             g.setColor(Color.RED);

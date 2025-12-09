@@ -16,9 +16,10 @@ public class Dragon extends GinsengTile {
 
     @Override
     public boolean canUseAbility() {
-        return this.isInRedGarden();
+        return this.isInRedGarden() && !this.isTurtleBlocked();
     }
 
+    @Override
     public List<Position> getAbilityAffectedTiles() {
         if(!this.canUseAbility())
             return Collections.emptyList();
@@ -34,6 +35,12 @@ public class Dragon extends GinsengTile {
         return affected;
     }
 
+    /**
+     * Checks whether the dragon can push away a tile at the target position.
+     *
+     * @param target The target position.
+     * @return True if the dragon can push the tile, false otherwise.
+     */
     private boolean canPush(Position target) {
         var pos = getPosition();
         var after = new Position(target.getX() - (pos.getX()-target.getX()), target.getY() - (pos.getY()-target.getY()));
@@ -44,6 +51,7 @@ public class Dragon extends GinsengTile {
         return table.getTile(target).isPresent() && table.getTile(after).isEmpty();
     }
 
+    @Override
     public void useAbility(Position target) {
         if(!this.canUseAbility() || !canPush(target))
             return;

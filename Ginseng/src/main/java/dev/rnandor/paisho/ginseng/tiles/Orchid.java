@@ -1,11 +1,7 @@
 package dev.rnandor.paisho.ginseng.tiles;
 
-import dev.rnandor.paisho.Position;
 import dev.rnandor.paisho.Table;
 import dev.rnandor.paisho.TileEntry;
-
-import java.io.Serializable;
-import java.util.List;
 
 @TileEntry(value = "oc")
 public class Orchid extends GinsengTile {

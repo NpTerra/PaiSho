@@ -16,9 +16,10 @@ public class Badgermole extends GinsengTile {
 
     @Override
     public boolean canUseAbility() {
-        return this.isInWhiteGarden();
+        return this.isInWhiteGarden() && !this.isTurtleBlocked();
     }
 
+    @Override
     public List<Position> getAbilityAffectedTiles() {
         if(!this.canUseAbility())
             return Collections.emptyList();
@@ -34,6 +35,12 @@ public class Badgermole extends GinsengTile {
         return affected;
     }
 
+    /**
+     * Checks whether the badgermole can flip a tile at the target position.
+     *
+     * @param target The target position.
+     * @return True if the badgermole can flip the tile, false otherwise.
+     */
     private boolean canFlip(Position target) {
         var pos = getPosition();
         var after = new Position(target.getX() + (pos.getX()-target.getX())*2, target.getY() + (pos.getY()-target.getY())*2);
@@ -44,6 +51,7 @@ public class Badgermole extends GinsengTile {
         return table.getTile(target).isPresent() && table.getTile(after).isEmpty();
     }
 
+    @Override
     public void useAbility(Position target) {
         if(!this.canUseAbility() || !canFlip(target))
             return;

@@ -10,6 +10,12 @@ import java.net.URL;
 public class ImagePanel extends JPanel {
     private BufferedImage background;
 
+    /**
+     * Constructs an ImagePanel with the specified background image.
+     *
+     * @param image the URL of the background image
+     * @throws IOException if an I/O error occurs while reading the image
+     */
     public ImagePanel(URL image) throws IOException {
         this.background = ImageIO.read(image);
 

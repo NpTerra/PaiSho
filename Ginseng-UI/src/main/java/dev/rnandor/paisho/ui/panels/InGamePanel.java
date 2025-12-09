@@ -31,6 +31,12 @@ public class InGamePanel extends ImagePanel {
     @Getter
     private String gameName;
 
+    /**
+     * Constructs a new InGamePanel with the specified GameWindow.
+     *
+     * @param gameWindow the GameWindow to associate with this panel
+     * @throws IOException if an I/O error occurs
+     */
     public InGamePanel(GameWindow gameWindow) throws IOException {
         super(ResourceHelper.getResource("/background/panorama.jpg"));
         this.gameWindow = gameWindow;
@@ -98,6 +104,11 @@ public class InGamePanel extends ImagePanel {
         add(new Spacer(44, 0));
     }
 
+    /**
+     * Saves the current game to a .ginseng file.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     private void saveGame() throws IOException {
         log.info("Saving game...");
 
@@ -136,6 +147,13 @@ public class InGamePanel extends ImagePanel {
         log.debug("Showing InGamePanel");
     }
 
+    /**
+     * Sets the current game and updates the display.
+     *
+     * @param name the name of the game
+     * @param game the GinsengGame instance to display
+     * @throws IOException if an I/O error occurs
+     */
     public void setGame(String name, GinsengGame game) throws IOException {
         if(name.length() >= 20) {
             name = name.substring(0, 16)+"...";

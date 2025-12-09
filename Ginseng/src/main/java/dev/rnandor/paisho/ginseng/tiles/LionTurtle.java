@@ -1,10 +1,7 @@
 package dev.rnandor.paisho.ginseng.tiles;
 
-import dev.rnandor.paisho.Position;
 import dev.rnandor.paisho.Table;
 import dev.rnandor.paisho.TileEntry;
-
-import java.util.List;
 
 @TileEntry(value = "lt")
 public class LionTurtle extends GinsengTile {

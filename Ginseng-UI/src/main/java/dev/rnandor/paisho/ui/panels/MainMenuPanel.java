@@ -22,6 +22,12 @@ public class MainMenuPanel extends ImagePanel {
     JCheckBox bisonChange;
     JCheckBox ginsengChange;
 
+    /**
+     * Constructs a new MainMenuPanel with the specified GameWindow.
+     *
+     * @param gameWindow the GameWindow to associate with this panel
+     * @throws IOException if an I/O error occurs
+     */
     public MainMenuPanel(GameWindow gameWindow) throws IOException {
         super(ResourceHelper.getResource("/background/yes.jpg"));
         this.gameWindow = gameWindow;
@@ -75,13 +81,15 @@ public class MainMenuPanel extends ImagePanel {
         loading.add(loadButton);
 
         add(new Spacer());
-        //add(settings);
         add(creation);
         add(loading);
 
         log.info("Main menu created.");
     }
 
+    /**
+     * Starts a new game with the specified settings.
+     */
     private void startNewGame() {
         log.debug("Starting New Game: '{}'", text.getText());
         if(text.getText().isEmpty()) {
@@ -97,6 +105,12 @@ public class MainMenuPanel extends ImagePanel {
         }
     }
 
+    /**
+     * Opens a file chooser dialog to load a saved game.
+     *
+     * @throws IOException            if an I/O error occurs during loading
+     * @throws ClassNotFoundException if the class of a serialized object cannot be found
+     */
     private void loadGame() throws IOException, ClassNotFoundException {
         log.info("Game selection opened.");
 

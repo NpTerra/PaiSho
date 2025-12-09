@@ -52,6 +52,16 @@ public class WhiteLotus extends GinsengTile {
         return moves;
     }
 
+    /**
+     * Helper method.
+     * Adds the next position to the queue and moves list if it is valid.
+     *
+     * @param anchor The anchor position that must be occupied to move to the next position.
+     * @param next The next position to consider.
+     * @param queue The queue used for BFS traversal.
+     * @param visited A 2D array tracking visited positions.
+     * @param moves The list of valid moves.
+     */
     private void addIfValid(Position anchor, Position next, Queue<Position> queue, boolean[][] visited, List<Position> moves) {
         if(!table.isValidPosition(next))
             return;

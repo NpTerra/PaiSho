@@ -12,6 +12,11 @@ public class ColorPanel extends JPanel {
     @Getter @Setter
     private Color color;
 
+    /**
+     * Constructs a ColorPanel with the specified color.
+     *
+     * @param color the color to fill the panel
+     */
     public ColorPanel(Color color) {
         this.color = color;
         this.setOpaque(false);

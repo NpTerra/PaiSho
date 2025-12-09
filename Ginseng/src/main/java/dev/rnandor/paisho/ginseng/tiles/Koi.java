@@ -1,10 +1,7 @@
 package dev.rnandor.paisho.ginseng.tiles;
 
-import dev.rnandor.paisho.Position;
 import dev.rnandor.paisho.Table;
 import dev.rnandor.paisho.TileEntry;
-
-import java.util.List;
 
 @TileEntry(value = "koi")
 public class Koi extends GinsengTile {

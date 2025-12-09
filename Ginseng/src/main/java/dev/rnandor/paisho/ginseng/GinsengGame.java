@@ -27,6 +27,7 @@ public class GinsengGame extends PaiShoGame<GinsengTile> {
     private final boolean bisonFlightMode;
     private final boolean alternativeGinsengMode;
 
+    // Static block to initialize the TileRegistry
     static {
         try {
             registry = new TileRegistry<>(GinsengTile.class);
@@ -35,6 +36,16 @@ public class GinsengGame extends PaiShoGame<GinsengTile> {
         }
     }
 
+    /**
+     * Constructs a new GinsengGame with the specified game modes.
+     *
+     * @param bisonGrantsFlight          whether the Sky Bison grants flight
+     * @param alternativeGinsengProtection whether the alternative Ginseng protection mode is enabled
+     * @throws NoSuchMethodException      if a required method is not found
+     * @throws InvocationTargetException  if there is an error during tile instantiation
+     * @throws InstantiationException     if there is an error during tile instantiation
+     * @throws IllegalAccessException     if there is illegal access during tile instantiation
+     */
     public GinsengGame(boolean bisonGrantsFlight, boolean alternativeGinsengProtection) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         super(registry);
 
@@ -84,6 +95,11 @@ public class GinsengGame extends PaiShoGame<GinsengTile> {
         }
     }
 
+    /**
+     * Checks if capturing is allowed based on the positions of the Lotus tiles.
+     *
+     * @return true if capturing is allowed, false otherwise.
+     */
     public boolean isCapturingAllowed() {
         return !hostLotus.isInTemple() && !guestLotus.isInTemple();
     }

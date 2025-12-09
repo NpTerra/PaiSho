@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         log.info("Starting Ginseng PaiSho UI...");
+        log.debug(System.getProperty("os.name"));
 
         try {
             var w = new GameWindow("Ginseng PaiSho", 1000, 700);
