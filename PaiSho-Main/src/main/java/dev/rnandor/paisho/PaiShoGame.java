@@ -1,34 +1,33 @@
 package dev.rnandor.paisho;
 
 import lombok.Getter;
+import lombok.Setter;
 
-import java.lang.reflect.Constructor;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Getter
-public abstract class PaiShoGame<T extends Tile> {
+public abstract class PaiShoGame<T extends Tile> implements Serializable {
 
-    private final Table table;
+    protected final Table table;
 
-    private final Set<T> tiles;
+    protected final Set<T> tiles;
 
     private final TileRegistry<T> registry;
 
     private int turn = 1;
 
+    @Setter
+    private GameStatus status;
+
     protected PaiShoGame(TileRegistry<T> registry) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         table = new Table();
         tiles = new HashSet<>();
         this.registry = registry;
-
-        for (Class<? extends T> tileClass : registry.getTiles()) {
-            Constructor<? extends T> construct = tileClass.getDeclaredConstructor(boolean.class, int.class, Table.class);
-            var ann = tileClass.getAnnotation(TileEntry.class);
-            tiles.add(construct.newInstance(true, ann.priority(), table));
-            tiles.add(construct.newInstance(false, ann.priority(), table));
-        }
+        this.status = GameStatus.RUNNING;
     }
 
     protected PaiShoGame(Class<T> tileClass) throws TileRegistry.EntryClashException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -36,15 +35,33 @@ public abstract class PaiShoGame<T extends Tile> {
     }
 
     public final boolean isHostTurn() {
-        return turn%2 == 0;
+        return isGameRunning() && turn%2 == 0;
     }
 
     public final boolean isGuestTurn() {
-        return turn%2 == 1;
+        return isGameRunning() && turn%2 == 1;
     }
 
     public final void nextTurn() {
-        turn++;
+        if(isGameRunning())
+            turn++;
+    }
+
+    public boolean isGameRunning() {
+        return status.equals(GameStatus.RUNNING);
+    }
+
+    public boolean isGameOver() {
+        return !isGameRunning();
+    }
+
+    public abstract boolean checkForDraw();
+
+    public enum GameStatus {
+        RUNNING,
+        HOST_WIN,
+        GUEST_WIN,
+        DRAW
     }
 
 }

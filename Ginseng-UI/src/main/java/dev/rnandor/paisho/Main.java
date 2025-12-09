@@ -14,46 +14,10 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         log.info("Starting Ginseng PaiSho UI...");
 
-        Table t = new Table();
-
-        printPos(0, 0, t);
-        printPos(8, 0, t);
-        printPos(-8, 0, t);
-        printPos(0, 8, t);
-        printPos(0, -8, t);
-
-        printPos(8, 8, t);
-
-
-        var w = new GameWindow("hehe", 1000, 1000);
-        w.add(new JPanel()  {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                System.out.println("a");
-                g.setColor(Color.RED);
-                g.drawRect(0, 0, 100, 100);
-            }
-        });
-        System.out.println(System.currentTimeMillis()/1000);
-        Thread.sleep(2000);
-        w.show();
-        w.setVisible(false);
-        w.dispose();
-        //w.repaint();
-    }
-
-    private static void printPos(int x, int y, Table t) {
-        int mask = t.getType(x, y).get();
-        log.debug("\n---- Position Debug ----");
-        log.debug("Position: ("+x+", "+y+")");
-        log.debug("Red garden: "+Table.isRedGarden(mask));
-        log.debug("White garden: "+Table.isWhiteGarden(mask));
-        log.debug("Temple: "+Table.isTemple(mask));
-        log.debug("");
-        log.debug("North: "+Table.isFrom(mask, NORTHERN_TEMPLE));
-        log.debug("South: "+Table.isFrom(mask, SOUTHERN_TEMPLE));
-        log.debug("West: "+Table.isFrom(mask, WESTERN_TEMPLE));
-        log.debug("East: "+Table.isFrom(mask, EASTERN_TEMPLE));
+        try {
+            var w = new GameWindow("Ginseng PaiSho", 1000, 700);
+        } catch (Exception e) {
+            log.error("Error while creating window:", e);
+        }
     }
 }

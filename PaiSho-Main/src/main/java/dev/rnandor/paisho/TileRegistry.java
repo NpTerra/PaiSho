@@ -2,15 +2,17 @@ package dev.rnandor.paisho;
 
 import org.reflections.Reflections;
 
+import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public final class TileRegistry<T extends Tile> {
+public final class TileRegistry<T extends Tile> implements Serializable {
 
     private HashMap<String, Class<? extends T>> tiles = new HashMap<>();
+    private HashMap<Class<? extends T>, String> codes = new HashMap<>();
 
     public TileRegistry(Class<T> tClass) throws EntryClashException {
         this(TileRegistry.class.getPackageName(), tClass);
@@ -35,7 +37,12 @@ public final class TileRegistry<T extends Tile> {
                 );
 
             tiles.put(id, clazz);
+            codes.put(clazz, id);
         }
+    }
+
+    public Optional<String> getCode(Class<? extends T> clazz) {
+        return Optional.ofNullable(codes.get(clazz));
     }
 
     public Optional<Class<? extends T>> getTile(String name) {

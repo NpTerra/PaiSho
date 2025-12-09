@@ -1,15 +1,17 @@
 package dev.rnandor.paisho;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static dev.rnandor.paisho.Table.Locale.*;
 
 
 @Slf4j
-public class Table {
+public class Table implements Serializable {
     private Tile[][] tiles = new Tile[17][17];
     private int[][] types = new int[17][17];
 
@@ -89,7 +91,7 @@ public class Table {
      * @param y The y coordinate to check.
      * @return True if the coordinates are within the table bounds, false otherwise.
      */
-    private boolean isValidPosition(int x, int y) {
+    public boolean isValidPosition(int x, int y) {
         var a = Math.abs(x);
         var b = Math.abs(y);
 
@@ -97,7 +99,64 @@ public class Table {
         return (a <= 8 && b <= 8) && (a + b <= 12); // diamond check
     }
 
-    private int[] fromGameCoords(int x, int y) {
+    public boolean isValidPosition(Position pos) {
+        return isValidPosition(pos.getX(), pos.getY());
+    }
+
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if(!isValidPosition(x1, y1) || !isValidPosition(x2, y2))
+            throw new IllegalArgumentException("Invalid coordinates");
+
+        if(getTile(x2, y2).isPresent())
+            throw new IllegalArgumentException("There's another Tile at the target coordinates.");
+
+        var coords1 = fromGameCoords(x1, y1);
+        var coords2 = fromGameCoords(x2, y2);
+
+        tiles[coords2[0]][coords2[1]] = tiles[coords1[0]][coords1[1]];
+        tiles[coords1[0]][coords1[1]] = null;
+
+        getTile(x2, y2).ifPresent(t -> {
+          t.setPosition(x2, y2);
+          t.afterMoved();
+        });
+        return getTile(x2, y2).isPresent();
+    }
+
+    public boolean move(Tile t, int x, int y) {
+        if(this.getTile(t.getPosition()).orElse(null) != t)
+            throw new IllegalArgumentException("Given Tile is not on this board.");
+
+        return this.move(t.getPosition().getX(), t.getPosition().getY(), x, y);
+    }
+
+    public boolean move(Tile t, Position pos) {
+        return this.move(t, pos.getX(), pos.getY());
+    }
+
+    public void remove(int x, int y) {
+        var coords = fromGameCoords(x, y);
+        tiles[coords[0]][coords[1]] = null;
+    }
+
+    public void remove(Tile t) {
+        if(this.getTile(t.getPosition()).orElse(null) != t)
+            throw new IllegalArgumentException("Given Tile is not on this board.");
+
+        this.remove(t.getPosition().getX(), t.getPosition().getY());
+    }
+
+    public void put(Tile t) {
+        var pos = t.getPosition();
+        var coords = fromGameCoords(pos.getX(), pos.getY());
+        if(tiles[coords[0]][coords[1]] != null) {
+            throw new IllegalArgumentException("Given Tile cannot be placed as there's another Tile already at the target position.");
+        }
+
+        tiles[coords[0]][coords[1]] = t;
+    }
+
+    public int[] fromGameCoords(int x, int y) {
         return new int[] {x+8, y+8};
     }
 
@@ -110,6 +169,10 @@ public class Table {
         return Optional.ofNullable(tiles[coords[0]][coords[1]]);
     }
 
+    public final Optional<Tile> getTile(Position pos) {
+        return  getTile(pos.getX(), pos.getY());
+    }
+
     public final Optional<Integer> getType(int x, int y) {
         if(!isValidPosition(x, y))
             throw new IndexOutOfBoundsException("Coordinates out of bounds");
@@ -117,6 +180,10 @@ public class Table {
         var coords = fromGameCoords(x, y);
 
         return Optional.of(types[coords[0]][coords[1]]);
+    }
+
+    public final Optional<Integer> getType(Position pos) {
+        return getType(pos.getX(), pos.getY());
     }
 
     public static boolean isFrom(int type, Locale... position) {
@@ -153,6 +220,7 @@ public class Table {
         SOUTHERN_TEMPLE(1 << 5),
         WESTERN_TEMPLE(1 << 6);
 
+        @Getter
         final int flag;
     }
 }

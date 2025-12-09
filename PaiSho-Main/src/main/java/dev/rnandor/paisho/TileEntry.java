@@ -9,5 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface TileEntry {
     String value();
-    int priority() default 0;
 }
