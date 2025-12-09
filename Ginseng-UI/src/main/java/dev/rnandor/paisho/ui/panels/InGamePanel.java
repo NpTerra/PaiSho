@@ -24,6 +24,8 @@ public class InGamePanel extends ImagePanel {
     private GameBoardPanel gameBoard;
 
     private JLabel titleLabel;
+    private JLabel bisonLabel;
+    private JLabel ginsengLabel;
 
     @Getter
     private GinsengGame game;
@@ -51,6 +53,11 @@ public class InGamePanel extends ImagePanel {
         welcome.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel = new JLabel();
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        ginsengLabel = new JLabel();
+        ginsengLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bisonLabel = new JLabel();
+        bisonLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton forfeitButton = new JButton("Forfeit");
         forfeitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -82,6 +89,9 @@ public class InGamePanel extends ImagePanel {
         sidePanel.add(new Spacer(0, 10));
         sidePanel.add(welcome);
         sidePanel.add(titleLabel);
+        sidePanel.add(new Spacer(0, 25));
+        sidePanel.add(bisonLabel);
+        sidePanel.add(ginsengLabel);
         sidePanel.add(new Spacer());
         sidePanel.add(forfeitButton);
         sidePanel.add(new Spacer());
@@ -159,6 +169,8 @@ public class InGamePanel extends ImagePanel {
             name = name.substring(0, 16)+"...";
         }
         this.titleLabel.setText("Game: '" + name +"'");
+        this.ginsengLabel.setText("Alternative Ginseng: " + (game.isAlternativeGinsengMode() ? "Enabled" : "Disabled"));
+        this.bisonLabel.setText("Alternative Bison: " + (game.isBisonFlightMode() ? "Enabled" : "Disabled"));
         this.game = game;
         this.gameName = name;
         gameBoard.setGame(game);
